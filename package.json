@@ -1,0 +1,19 @@
+{
+  "name": "af-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.7",
+    "cors": "^2.8.5",
+    "env": "^0.0.2",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "mongoose": "^6.3.0"
+  }
+}
