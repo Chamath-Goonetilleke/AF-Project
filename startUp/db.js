@@ -1,7 +1,7 @@
-import config from "config";
-import mongoose from "mongoose";
+const  config =require("config");
+const  mongoose =require("mongoose");
 
-export default function () {
+module.exports= function () {
   
   const db = config.get('db');
   const env = config.get('name');

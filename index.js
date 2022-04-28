@@ -1,14 +1,14 @@
-import db from "./startUp/db.js";
-import express from "express";
-import config from "./startUp/config.js";
+const express = require("express");
 const app = express();
 
-config();
-db();
+
+require("./startUp/db")();
+require("./startUp/config")();
+require('./startUp/routes')(app)
 
 const port = process.env.PORT || 4500;
 const server = app.listen(port, () => {
   console.log(`Listning on Port : ${port} `);
 });
 
-export default server;
+module.exports= server;

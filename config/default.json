@@ -1,5 +1,5 @@
 {
   "name":"dev",
   "db":"mongodb://localhost/Af_project",
-  "jwtPrivateKey":""
+  "jwtPrivateKey":"1234"
 }
