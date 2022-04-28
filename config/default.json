@@ -1,5 +1,6 @@
 {
   "name":"dev",
-  "db":"mongodb://localhost/Af_project",
+  "dbb":"mongodb://localhost/Af_project",
+  "db":"mongodb+srv://IT20122096:bolMAEMHnkwrXCyB@itp.02s4w.mongodb.net/research_management?retryWrites=true&w=majority",
   "jwtPrivateKey":"1234"
 }
