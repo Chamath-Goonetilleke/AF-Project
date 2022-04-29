@@ -5,6 +5,12 @@ const router = express.Router();
 const { User, validateUser } = require("../../models/IT20122096/user");
 const Validator = require("../../middleware/validator");
 
+router.get("/", async(req, res)=> {
+  
+  const users = await User.find();
+  res.send(users);
+})
+
 router.post("/", Validator(validateUser), async (req, res) => {
   //check user already registered
   let user = await User.findOne({ email: req.body.email });
