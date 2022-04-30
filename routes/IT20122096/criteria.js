@@ -3,7 +3,11 @@ const { Criterias } = require("../../models/IT20122096/Criterias");
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  const criterias = new Criterias({
+
+  let criterias = req.body.markingRubrikId;
+  if(!criterias) return res.status(400).send("No marking provided")
+
+  criterias = new Criterias({
     name: req.body.name,
     value: req.body.value,
     markingRubrikId: req.body.markingRubrikId,

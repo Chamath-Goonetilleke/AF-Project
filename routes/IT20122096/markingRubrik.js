@@ -4,10 +4,13 @@ const router = express.Router();
 
 router.post('/', (req, res) => {
   
-  const Marking = new MarkingRubrik({ name: req.body.name });
+  let Marking = req.body.name;
+  if (!Marking) return res.status(400).send("No name")
+  
+  Marking= new MarkingRubrik({ name: req.body.name });
   Marking.save();
 
-  res.send("marking saved");
+  res.send(Marking);
 });
 
 module.exports = router;
