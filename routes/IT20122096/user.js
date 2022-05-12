@@ -9,6 +9,10 @@ router.get("/", async (req, res) => {
   const users = await User.find();
   res.send(users);
 });
+router.get("/:id", async (req, res) => {
+  const users = await User.findById(req.params.id);
+  res.send(users);
+});
 
 router.post("/", Validator(validateUser), async (req, res) => {
   //check user already registered
