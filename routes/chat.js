@@ -3,7 +3,7 @@ const express = require("express");
 const researchRecordRoutes = express.Router();
 
 const dbo = require("../config/dbcon");
-dbo.connectToServer("Research", function (err) {
+dbo.connectToServer("research_management", function (err) {
   if (err) console.log(err);
 });
 
@@ -17,8 +17,9 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
-researchRecordRoutes.route("/chat/:id").post(function (req, res) {
-  let db_connect = dbo.getDb("Research");
+// Send a message to a specific research group
+researchRecordRoutes.route("/:id").post(function (req, res) {
+  let db_connect = dbo.getDb();
   let obj = {
     Message: req.body.Message,
     SendBy: req.body.SendBy,
@@ -31,8 +32,9 @@ researchRecordRoutes.route("/chat/:id").post(function (req, res) {
   pusher.trigger(req.params.id, "new_message", obj);
 });
 
-researchRecordRoutes.route("/chat/:id").get(function (req, res) {
-  let db_connect = dbo.getDb("Research");
+// // Get all messages relating to a specific research group
+researchRecordRoutes.route("/:id").get(function (req, res) {
+  let db_connect = dbo.getDb();
   db_connect
     .collection(req.params.id)
     .find()

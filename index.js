@@ -7,12 +7,10 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "http://localhost:1234" }));
 
-app.use(require("./routes/staff"));
-app.use(require("./routes/chat"));
-
-app.use(express.json());
+app.use("/staff", require("./routes/staff"));
+app.use("/chat", require("./routes/chat"));
 
 const PORT = process.env.PORT || 5000;
 
