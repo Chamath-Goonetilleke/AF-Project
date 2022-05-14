@@ -87,6 +87,19 @@ researchRecordRoutes.route("/requests/decline/:id").put(function (req, res) {
     });
 });
 
+researchRecordRoutes.route("/submissions/:id").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  db_connect
+    .collection("registertopics")
+    .find({ groupid: req.params.id })
+    .toArray(function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      res.json(result);
+    });
+});
+
 // Return all the marking rubricks
 researchRecordRoutes.route("/markings").get(function (req, res) {
   let db_connect = dbo.getDb();
