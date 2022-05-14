@@ -61,12 +61,16 @@ router.route("/register/members").post((req, res) => {
   const userRole = "Student";
   const userId = req.body.userId;
   const name = req.body.name;
+  const email = req.body.email;
+  const isLeader = req.body.isLeader;
 
   const groupMember = new GroupMembers({
     groupid,
     userRole,
     userId,
     name,
+    email,
+    isLeader,
   });
 
   groupMember
@@ -114,7 +118,6 @@ router.route("/request/topic").post((req, res) => {
 
 router.route("/getsupervisor").get((req, res) => {
   let field = req.query.field;
-  
 
   console.log(field);
   Supervisor.find({ field: field })
@@ -141,6 +144,11 @@ router.route("/add").post((req, res) => {
   const supercisorid = "";
   const cosupercisorid = "";
   const panelmember = "";
+  const report = "";
+  const presentation = "";
+  const proposal = "";
+  const isOngoing = true;
+
   console.log(groupid);
 
   const newGroup = new Group({
@@ -148,6 +156,10 @@ router.route("/add").post((req, res) => {
     supercisorid,
     cosupercisorid,
     panelmember,
+    report,
+    presentation,
+    proposal,
+    isOngoing,
   });
 
   newGroup

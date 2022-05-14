@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -47,6 +48,14 @@ const groupSchema = new Schema({
   },
   panelmember: {
     type: String,
+  },
+
+  report: String,
+  presentation: String,
+  proposal: String,
+  Finalthesis: String,
+  isOngoing: {
+    type: Boolean,
   },
 });
 

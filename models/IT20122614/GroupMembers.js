@@ -20,6 +20,14 @@ const groupmembersSchema = new Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
+  isLeader: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const GroupMembers = mongoose.model("groupmembers", groupmembersSchema);
