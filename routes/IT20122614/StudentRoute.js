@@ -5,6 +5,7 @@ const GroupMembers = require("../../models/IT20122614/groupmembers");
 let Topic = require("../../models/IT20122614/RegisterTopic");
 const RequestSepervisor = require("../../models/IT20122614/RequestSepervisor");
 const Supervisor = require("../../models/IT20122614/Supervisor");
+const User = require("../../models/IT20122614/User_IT20122614");
 const upload = require("../../config/it20122614/multer");
 
 // SET STORAGE
@@ -118,9 +119,11 @@ router.route("/request/topic").post((req, res) => {
 
 router.route("/getsupervisor").get((req, res) => {
   let field = req.query.field;
+  let userRole = req.query.userRole;
+  
 
-  console.log(field);
-  Supervisor.find({ field: field })
+  //console.log(field);
+  User.find({ researchField: field, userRole: userRole })
     .then((supervisor) => {
       res.json(supervisor);
       console.log(supervisor);
