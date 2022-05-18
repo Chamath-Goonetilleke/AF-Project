@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 
 const requestTopic = new mongoose.Schema({
-  supervisorid: {
-    type: String,
-    required: true,
-  },
-  supervisorname: {
+  uId: {
     type: String,
     required: true,
   },

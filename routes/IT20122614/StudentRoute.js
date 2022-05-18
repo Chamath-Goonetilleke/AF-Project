@@ -86,8 +86,8 @@ router.route("/register/members").post((req, res) => {
 
 router.route("/request/topic").post((req, res) => {
   console.log("called======================");
-  const supervisorid = req.body.supervisorid;
-  const supervisorname = req.body.supervisorname;
+  const uId = req.body.uId;
+
   const field = req.body.supervisorField;
   const topic = req.body.topic;
   const message = req.body.message;
@@ -96,8 +96,7 @@ router.route("/request/topic").post((req, res) => {
   const userRole = req.body.userRole;
 
   const requestTopic = new RequestSepervisor({
-    supervisorid,
-    supervisorname,
+    uId,
     field,
     topic,
     message,
@@ -120,7 +119,6 @@ router.route("/request/topic").post((req, res) => {
 router.route("/getsupervisor").get((req, res) => {
   let field = req.query.field;
   let userRole = req.query.userRole;
-  
 
   //console.log(field);
   User.find({ researchField: field, userRole: userRole })
@@ -198,6 +196,56 @@ router.post("/topic/add", upload.single("image"), async (req, res) => {
     res.json(newTopic);
   } catch (err) {
     console.log(err + " my error");
+  }
+});
+router.put("/presentation", upload.single("image"), async (req, res) => {
+  try {
+    const group_Id = req.body.groupid;
+    // const group_Id = "SE3030_GRP_15";
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: "presantation.pptx",
+      resource_type: "raw",
+      raw_convert: "aspose",
+    });
+    const groupid = { groupid: group_Id };
+    // const presentation = { $set: { presentation: result.secure_url } };
+    const presentation = { $set: { presentation: result.secure_url } };
+    const options = { upsert: true };
+
+    // Group.updateOne(groupid, presentation, function (err, ress) {
+    //   if (err) throw err;
+    //   console.log("1 document updated");
+    //   res.json("presentation added");
+    // });
+    const results = await Group.updateOne(groupid, presentation, options);
+    console.log(results);
+    res.json("presentation added");
+    res.status = 200;
+  } catch (error) {
+    console.log("errrrrrrrr=========================");
+    console.log(error);
+  }
+});
+router.put("/report", upload.single("image"), async (req, res) => {
+  try {
+    const group_Id = req.body.groupid;
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const groupid = { groupid: group_Id };
+    const report = { $set: { report: result.secure_url } };
+    const options = { upsert: true };
+
+    // Group.findOneAndUpdate(groupid, report, function (err, ress) {
+    //   if (err) throw err;
+    //   console.log("1 document updated");
+    //   res.json("report added");
+    // });
+    const results = await Group.updateOne(groupid, report, options);
+    console.log(results);
+    res.json("presentation added");
+    res.status = 200;
+  } catch (error) {
+    console.log("err");
+    console.log(error);
   }
 });
 

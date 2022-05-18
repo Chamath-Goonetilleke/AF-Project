@@ -8,38 +8,6 @@ const groupSchema = new Schema({
     type: String,
     required: true,
   },
-  // leadername: {
-  //   type: String,
-  //   required: true,
-  // },
-  // leaderitnumber: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st2name: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st2itnumber: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st3name: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st3itnumber: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st4name: {
-  //   type: String,
-  //   required: true,
-  // },
-  // st4itnumber: {
-  //   type: String,
-  //   required: true,
-  // },
   supercisorid: {
     type: String,
   },
