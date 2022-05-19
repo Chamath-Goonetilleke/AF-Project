@@ -46,18 +46,26 @@ researchRecordRoutes.route("/requests/accept/:id").put(function (req, res) {
     },
   };
   let db_connect = dbo.getDb();
+
   db_connect
     .collection("request_toics")
-    .findOne(myquery, function (err0, result0) {
+    .findOne(myquery, async function (err0, result0) {
       if (err0) {
         console.log(err0);
       }
-      db_connect.createCollection(result0.groupid, function (err1, result1) {
-        if (err1) {
-          console.log(err1);
-        }
-      });
+
+      const collections = (
+        await db_connect.listCollections({}, { nameOnly: true }).toArray()
+      ).map(({ name }) => name);
+      if (!collections.includes(result0.groupid)) {
+        db_connect.createCollection(result0.groupid, function (err1, result1) {
+          if (err1) {
+            console.log(err1);
+          }
+        });
+      }
     });
+
   db_connect
     .collection("request_toics")
     .updateOne(myquery, newvalues, function (err, result) {
