@@ -104,12 +104,13 @@ router.route("/request/topic").post((req, res) => {
     status,
     userRole,
   });
-  console.log(requestTopic);
+  console.log("worked===============================");
 
   requestTopic
     .save()
-    .then(() => {
-      res.json("Topic Requested");
+    .then((ress) => {
+      console.log("worked2===============================");
+      res.json(ress);
     })
     .catch((err) => {
       console.log(err);
@@ -148,6 +149,7 @@ router.route("/add").post((req, res) => {
   const report = "";
   const presentation = "";
   const proposal = "";
+  const Finalthesis = "";
   const isOngoing = true;
 
   console.log(groupid);
@@ -160,6 +162,7 @@ router.route("/add").post((req, res) => {
     report,
     presentation,
     proposal,
+    Finalthesis,
     isOngoing,
   });
 
@@ -232,6 +235,50 @@ router.put("/report", upload.single("image"), async (req, res) => {
     const result = await cloudinary.uploader.upload(req.file.path);
     const groupid = { groupid: group_Id };
     const report = { $set: { report: result.secure_url } };
+    const options = { upsert: true };
+
+    // Group.findOneAndUpdate(groupid, report, function (err, ress) {
+    //   if (err) throw err;
+    //   console.log("1 document updated");
+    //   res.json("report added");
+    // });
+    const results = await Group.updateOne(groupid, report, options);
+    console.log(results);
+    res.json("presentation added");
+    res.status = 200;
+  } catch (error) {
+    console.log("err");
+    console.log(error);
+  }
+});
+router.put("/proposal", upload.single("image"), async (req, res) => {
+  try {
+    const group_Id = req.body.groupid;
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const groupid = { groupid: group_Id };
+    const report = { $set: { proposal: result.secure_url } };
+    const options = { upsert: true };
+
+    // Group.findOneAndUpdate(groupid, report, function (err, ress) {
+    //   if (err) throw err;
+    //   console.log("1 document updated");
+    //   res.json("report added");
+    // });
+    const results = await Group.updateOne(groupid, report, options);
+    console.log(results);
+    res.json("presentation added");
+    res.status = 200;
+  } catch (error) {
+    console.log("err");
+    console.log(error);
+  }
+});
+router.put("/thesis", upload.single("image"), async (req, res) => {
+  try {
+    const group_Id = req.body.groupid;
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const groupid = { groupid: group_Id };
+    const report = { $set: { Finalthesis: result.secure_url } };
     const options = { upsert: true };
 
     // Group.findOneAndUpdate(groupid, report, function (err, ress) {
