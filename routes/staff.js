@@ -14,7 +14,7 @@ researchRecordRoutes.route("/topics/:id").get(function (req, res) {
   let db_connect = dbo.getDb();
   db_connect
     .collection("request_toics")
-    .find({ supervisorid: req.params.id, status: "accepted" })
+    .find({ uId: req.params.id, status: "accepted" })
     .toArray(function (err, result) {
       if (err) {
         console.log(err);
@@ -28,7 +28,7 @@ researchRecordRoutes.route("/requests/:id").get(function (req, res) {
   let db_connect = dbo.getDb();
   db_connect
     .collection("request_toics")
-    .find({ supervisorid: req.params.id, status: "pending" })
+    .find({ uId: req.params.id, status: "pending" })
     .toArray(function (err, result) {
       if (err) {
         console.log(err);
@@ -98,9 +98,8 @@ researchRecordRoutes.route("/requests/decline/:id").put(function (req, res) {
 researchRecordRoutes.route("/submissions/:id").get(function (req, res) {
   let db_connect = dbo.getDb();
   db_connect
-    .collection("registertopics")
-    .find({ groupid: req.params.id })
-    .toArray(function (err, result) {
+    .collection("researchgroups")
+    .findOne({ groupid: req.params.id }, function (err, result) {
       if (err) {
         console.log(err);
       }
@@ -138,6 +137,7 @@ researchRecordRoutes.route("/markings/:id").get(function (req, res) {
 
 // Save marks of a specific marking rubrick relating to a group
 researchRecordRoutes.route("/insertmarks/:id").post(function (req, res) {
+  let isMarked = false;
   let db_connect = dbo.getDb();
   let markingRubrickName = req.body.name.toLowerCase();
   let myobj = {
@@ -154,16 +154,39 @@ researchRecordRoutes.route("/insertmarks/:id").post(function (req, res) {
       }
       for (let index = 0; index < result.length; index++) {
         if (result[index].name === myobj.name) {
-          res.sendStatus(406);
-          return;
+          isMarked = true;
+          break;
         }
       }
-      db_connect.collection("marks").insertOne(myobj, function (err, result) {
-        if (err) {
-          console.log(err);
-        }
+      if (isMarked === false) {
+        db_connect.collection("marks").insertOne(myobj, function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        let myquery = { groupid: req.params.id };
+        let newvalues = {
+          $set: {
+            isMarked: true,
+          },
+        };
+        db_connect
+          .collection("researchgroups")
+          .updateOne(myquery, newvalues, function (err, result) {
+            if (err) {
+              console.log(err);
+            }
+          });
+      }
+
+      if (isMarked === false) {
         res.sendStatus(200);
-      });
+      } else {
+        res.send({
+          msg: false,
+        });
+      }
     });
 });
 
