@@ -5,6 +5,8 @@ const login = require("../routes/IT20122096/login");
 const criteria = require("../routes/IT20122096/criteria");
 const markingRubrik = require("../routes/IT20122096/markingRubrik");
 const adminProfile = require("../routes/IT20122096/adminProfile");
+const pannelMemReqs = require("../routes/IT20122096/pannelMemReqs")
+const template = require("../routes/IT20122096/template");
 
 module.exports = function (app) {
   app.use(cors());
@@ -14,4 +16,6 @@ module.exports = function (app) {
   app.use("/api/criteria", criteria);
   app.use("/api/marking", markingRubrik);
   app.use("/api/admin", adminProfile);
+  app.use("/api/topicRequests", pannelMemReqs);
+  app.use("/api/template", template);
 };

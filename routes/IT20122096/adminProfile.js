@@ -40,9 +40,9 @@ router.put("/groups/UpdateGroupMembers/:id", async (req, res) => {
     req.params.id,
     {
       groupid: req.body.groupid,
-      userRole: req.body.userRole,
       userId: req.body.userId,
       name: req.body.name,
+      email: req.body.email,
     },
     { new: true }
   );

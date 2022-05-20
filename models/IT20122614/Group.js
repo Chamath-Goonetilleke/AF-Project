@@ -16,6 +16,13 @@ const groupSchema = new Schema({
   panelmember: {
     type: String,
   },
+  report: String,
+  presentation: String,
+  proposal: String,
+  Finalthesis: String,
+  isOngoing: {
+    type: Boolean,
+  },
 });
 
 const Group = mongoose.model("researchgroups", groupSchema);

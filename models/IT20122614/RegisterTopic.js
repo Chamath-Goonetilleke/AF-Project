@@ -3,19 +3,23 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const topicRegister = new Schema({
-  groupe: {
+  groupid: {
     type: String,
-    required: true,
   },
-  subject: {
+  topic: {
     type: String,
-    required: true,
   },
   message: {
     type: String,
   },
+  file: {
+    type: String,
+  },
+  field: {
+    type: String,
+  },
   status: {
-    type: Boolean,
+    type: String,
   },
 });
 

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const groupmembersSchema = new Schema({
-    groupid: {
+  groupid: {
     type: String,
     required: true,
   },
@@ -18,6 +18,14 @@ const groupmembersSchema = new Schema({
   },
   name: {
     type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  isLeader: {
+    type: Boolean,
     required: true,
   },
 });

@@ -41,4 +41,21 @@ router.post("/", Validator(validateUser), async (req, res) => {
   res.setHeader("x-auth-token", token).send(token);
 });
 
+router.put("/:id", async (req, res) => {
+  const user = await User.findByIdAndUpdate(req.params.id, {
+    name: req.body.name,
+    email: req.body.email,
+    researchField: req.body.researchField,
+  }, { new: true });
+  if (!user) return res.status(400).send("no user found");
+  res.send(user);
+  
+})
+
+router.delete("/:id", async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return res.status(400).send("delete user by id");
+  res.send(user);
+})
+
 module.exports = router;
