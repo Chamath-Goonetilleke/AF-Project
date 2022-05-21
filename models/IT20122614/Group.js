@@ -25,6 +25,9 @@ const groupSchema = new Schema({
   isOngoing: {
     type: Boolean,
   },
+  isMarked: {
+    type: Boolean,
+  }
 });
 
 const Group = mongoose.model("researchgroups", groupSchema);

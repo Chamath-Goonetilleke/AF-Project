@@ -7,6 +7,7 @@ const RequestSepervisor = require("../../models/IT20122614/RequestSepervisor");
 const Supervisor = require("../../models/IT20122614/Supervisor");
 const User = require("../../models/IT20122614/User_IT20122614");
 const upload = require("../../config/it20122614/multer");
+const { body, validationResult } = require("express-validator");
 
 // SET STORAGE
 // var storage = multer.diskStorage({
@@ -56,66 +57,97 @@ router.post("/uploads", upload.single("image"), async (req, res) => {
   }
 });
 
-router.route("/register/members").post((req, res) => {
-  // const groupid = req.body.groupid;
-  const groupid = req.body.groupid;
-  const userRole = "Student";
-  const userId = req.body.userId;
-  const name = req.body.name;
-  const email = req.body.email;
-  const isLeader = req.body.isLeader;
+router
+  .route("/register/members")
+  .post(body("email").isEmail().normalizeEmail(),body("userId").custom(value => {
+    return GroupMembers.find({
+      userId: value
+    }).then(user => {
+        if (user.length > 0) {
+            throw ("User Id is taken!"); //custom error message
+        }
+    });
+}), (req, res) => {
+    // const groupid = req.body.groupid;
+    const errors = validationResult(req);
+    const groupid = req.body.groupid;
+    const userRole = "Student";
+    const userId = req.body.userId;
+    const name = req.body.name;
+    const email = req.body.email;
+    const isLeader = req.body.isLeader;
 
-  const groupMember = new GroupMembers({
-    groupid,
-    userRole,
-    userId,
-    name,
-    email,
-    isLeader,
+    const groupMember = new GroupMembers({
+      groupid,
+      userRole,
+      userId,
+      name,
+      email,
+      isLeader,
+    });
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).json({
+        
+        success: false,
+        errors: errors.array(),
+      });
+    } else {
+      groupMember
+        .save()
+        .then(() => {
+          res.json("member added");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   });
 
-  groupMember
-    .save()
-    .then(() => {
-      res.json("member added");
-    })
-    .catch((err) => {
-      console.log(err);
+router.route("/request/topic").post(
+  body("message").isLength({
+    min: 6,
+  }),
+  (req, res) => {
+    console.log("called======================");
+    const uId = req.body.uId;
+    const errors = validationResult(req);
+    const field = req.body.supervisorField;
+    const topic = req.body.topic;
+    const message = req.body.message;
+    const groupid = "SE3030_GRP_82";
+    const status = "pending";
+    const userRole = req.body.userRole;
+
+    const requestTopic = new RequestSepervisor({
+      uId,
+      field,
+      topic,
+      message,
+      groupid,
+      status,
+      userRole,
     });
-});
-
-router.route("/request/topic").post((req, res) => {
-  console.log("called======================");
-  const uId = req.body.uId;
-
-  const field = req.body.supervisorField;
-  const topic = req.body.topic;
-  const message = req.body.message;
-  const groupid = "SE3030_GRP_82";
-  const status = "pending";
-  const userRole = req.body.userRole;
-
-  const requestTopic = new RequestSepervisor({
-    uId,
-    field,
-    topic,
-    message,
-    groupid,
-    status,
-    userRole,
-  });
-  console.log("worked===============================");
-
-  requestTopic
-    .save()
-    .then((ress) => {
-      console.log("worked2===============================");
-      res.json(ress);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+    console.log(uId);
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+    } else {
+      requestTopic
+        .save()
+        .then((ress) => {
+          console.log("worked2===============================");
+          res.json(ress);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+);
 
 router.route("/getsupervisor").get((req, res) => {
   let field = req.query.field;
@@ -151,6 +183,7 @@ router.route("/add").post((req, res) => {
   const proposal = "";
   const Finalthesis = "";
   const isOngoing = true;
+  const isMarked = false;
 
   console.log(groupid);
 
