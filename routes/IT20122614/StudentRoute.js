@@ -9,20 +9,11 @@ const User = require("../../models/IT20122614/User_IT20122614");
 const upload = require("../../config/it20122614/multer");
 const { body, validationResult } = require("express-validator");
 
-// SET STORAGE
-// var storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads')
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.fieldname + '-' + Date.now())
-//   }
-// });
-// var upload = multer({ storage: storage });
+router.get("/users/report", userReportHandler);
+function userReportHandler(req, res) {
+  res.render("userreport", { title: "Users Report" });
+}
 
-// router.post("/registertopic",upload.single('myImage'), (req, res)=>{
-//   const topic
-// })
 router.post("/uploads", upload.single("image"), async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
@@ -32,15 +23,7 @@ router.post("/uploads", upload.single("image"), async (req, res) => {
     const file = result.secure_url;
     const status = false;
     const field = req.body.field;
-    // const newTopic = new Topic({
-    //   groupid,
-    //   topic,
-    //   message,
-    //   file,
-    //   field,
-    //   status,
-    // });
-    // file: result.secure_url,
+
     let newTopic = new Topic({
       groupid: req.body.groupid,
       topic: req.body.subject,
@@ -57,17 +40,18 @@ router.post("/uploads", upload.single("image"), async (req, res) => {
   }
 });
 
-router
-  .route("/register/members")
-  .post(body("email").isEmail().normalizeEmail(),body("userId").custom(value => {
+router.route("/register/members").post(
+  body("email").isEmail().normalizeEmail(),
+  body("userId").custom((value) => {
     return GroupMembers.find({
-      userId: value
-    }).then(user => {
-        if (user.length > 0) {
-            throw ("User Id is taken!"); //custom error message
-        }
+      userId: value,
+    }).then((user) => {
+      if (user.length > 0) {
+        throw "User Id is taken!"; //custom error message
+      }
     });
-}), (req, res) => {
+  }),
+  (req, res) => {
     // const groupid = req.body.groupid;
     const errors = validationResult(req);
     const groupid = req.body.groupid;
@@ -88,7 +72,6 @@ router
     if (!errors.isEmpty()) {
       console.log(errors.array());
       return res.status(400).json({
-        
         success: false,
         errors: errors.array(),
       });
@@ -102,7 +85,8 @@ router
           console.log(err);
         });
     }
-  });
+  }
+);
 
 router.route("/request/topic").post(
   body("message").isLength({
@@ -163,51 +147,85 @@ router.route("/getsupervisor").get((req, res) => {
       console.log(err);
     });
 });
+// router.route("/").get(async (req, res) => {
+//   const userRole = "Supervisor";
+//   //console.log(field);
+//   await User.find()
+//     .then((res) => {
+//       // res.json({ status: 200 });
+//       // console.log(supervisor);
+//       res.status(200).send("found");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
-router.route("/add").post((req, res) => {
-  // const groupe = "SE3030_GRP_" + Math.floor(Math.random() * 100);
-  // const leadername = req.body.leadername;
-  // const leaderitnumber = req.body.leaderitnumber;
-  // const st2name = req.body.st2name;
-  // const st2itnumber = req.body.st2itnumber;
-  // const st3name = req.body.st3name;
-  // const st3itnumber = req.body.st3itnumber;
-  // const st4name = req.body.st4name;
-  // const st4itnumber = req.body.st4itnumber;
-  const groupid = req.body.groupid;
-  const supercisorid = "";
-  const cosupercisorid = "";
-  const panelmember = "";
-  const report = "";
-  const presentation = "";
-  const proposal = "";
-  const Finalthesis = "";
-  const isOngoing = true;
-  const isMarked = false;
 
-  console.log(groupid);
-
-  const newGroup = new Group({
-    groupid,
-    supercisorid,
-    cosupercisorid,
-    panelmember,
-    report,
-    presentation,
-    proposal,
-    Finalthesis,
-    isOngoing,
-  });
-
-  newGroup
-    .save()
-    .then(() => {
-      res.json("Group added");
-    })
-    .catch((err) => {
-      console.log(err);
+router.route("/add").post(
+  body("groupid").custom((value) => {
+    return Group.find({
+      groupid: value,
+    }).then((user) => {
+      if (user.length > 0) {
+        throw "Group Id is taken!"; //custom error message
+      }
     });
-});
+  }),
+  (req, res) => {
+    // const groupe = "SE3030_GRP_" + Math.floor(Math.random() * 100);
+    // const leadername = req.body.leadername;
+    // const leaderitnumber = req.body.leaderitnumber;
+    // const st2name = req.body.st2name;
+    // const st2itnumber = req.body.st2itnumber;
+    // const st3name = req.body.st3name;
+    // const st3itnumber = req.body.st3itnumber;
+    // const st4name = req.body.st4name;
+    // const st4itnumber = req.body.st4itnumber;
+    const errors = validationResult(req);
+    const groupid = req.body.groupid;
+    const supercisorid = "";
+    const cosupercisorid = "";
+    const panelmember = "";
+    const report = "";
+    const presentation = "";
+    const proposal = "";
+    const Finalthesis = "";
+    const isOngoing = true;
+    const isMarked = false;
+
+    console.log(groupid);
+
+    const newGroup = new Group({
+      groupid,
+      supercisorid,
+      cosupercisorid,
+      panelmember,
+      report,
+      presentation,
+      proposal,
+      Finalthesis,
+      isOngoing,
+      isMarked,
+    });
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+    } else {
+      newGroup
+        .save()
+        .then(() => {
+          res.json("Group added");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+);
 
 // router.route("/topic/add", upload.single("file")).post(async (req, res) => {
 router.post("/topic/add", upload.single("image"), async (req, res) => {
@@ -327,6 +345,30 @@ router.put("/thesis", upload.single("image"), async (req, res) => {
     console.log("err");
     console.log(error);
   }
+});
+// Display all users
+router.get("/usersGet", async (req, res) => {
+
+  const users = await User.find();
+
+  res.send(users);
+
+});
+//display all groups
+router.get("/groupget", async (req, res) => {
+
+  const users = await Group.find();
+
+  res.send(users);
+
+});
+//display all group members
+router.get("/groupmembersget", async (req, res) => {
+
+  const users = await GroupMembers.find();
+
+  res.send(users);
+
 });
 
 module.exports = router;
