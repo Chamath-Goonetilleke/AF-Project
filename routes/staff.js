@@ -63,45 +63,47 @@ researchRecordRoutes.route("/requests/accept/:id").put(function (req, res) {
             console.log(err1);
           }
         });
-
-        db_connect
-          .collection("users")
-          .findOne({ _id: result0.uId }, function (err, result2) {
-            if (err) {
-              console.log(err);
-            }
-
-            if (result2.userRole === "Supervisor") {
-              let obj = {
-                $set: {
-                  groupid: result0.groupid,
-                  supercisorid: result0.uId,
-                },
-              };
-              db_connect
-                .collection("researchgroups")
-                .insertOne(obj, function (err, result1) {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-            } else {
-              let obj = {
-                $set: {
-                  groupid: result0.groupid,
-                  cosupercisorid: result0.uId,
-                },
-              };
-              db_connect
-                .collection("researchgroups")
-                .insertOne(obj, function (err, result1) {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-            }
-          });
       }
+
+      db_connect
+        .collection("users")
+        .findOne({ _id: ObjectId(result0.uId) }, function (err, result2) {
+          if (err) {
+            console.log(err);
+          }
+
+          let myobj = {
+            groupid: result0.groupid,
+          };
+
+          if (result2.userRole === "Supervisor") {
+            let obj = {
+              $set: {
+                supercisorid: result0.uId,
+              },
+            };
+            db_connect
+              .collection("researchgroups")
+              .updateOne(myobj, obj, function (err, result1) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+          } else {
+            let obj = {
+              $set: {
+                cosupercisorid: result0.uId,
+              },
+            };
+            db_connect
+              .collection("researchgroups")
+              .updateOne(myobj, obj, function (err, result1) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+          }
+        });
     });
 
   db_connect
