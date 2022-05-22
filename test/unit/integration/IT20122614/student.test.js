@@ -49,6 +49,8 @@ describe("/api/students", () => {
       });
     });
 
+    // display all group members
+
     describe("GET/groupmembersget", () =>{
         it("should return all group members", async () =>{
             const res = await request(server).get("/api/students/groupmembersget");

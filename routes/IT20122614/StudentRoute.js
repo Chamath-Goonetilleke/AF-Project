@@ -9,10 +9,6 @@ const User = require("../../models/IT20122614/User_IT20122614");
 const upload = require("../../config/it20122614/multer");
 const { body, validationResult } = require("express-validator");
 
-router.get("/users/report", userReportHandler);
-function userReportHandler(req, res) {
-  res.render("userreport", { title: "Users Report" });
-}
 
 router.post("/uploads", upload.single("image"), async (req, res) => {
   try {
@@ -161,7 +157,6 @@ router.route("/getsupervisor").get((req, res) => {
 //     });
 // });
 
-
 router.route("/add").post(
   body("groupid").custom((value) => {
     return Group.find({
@@ -219,6 +214,7 @@ router.route("/add").post(
         .save()
         .then(() => {
           res.json("Group added");
+          res.status(200);
         })
         .catch((err) => {
           console.log(err);
@@ -248,6 +244,7 @@ router.post("/topic/add", upload.single("image"), async (req, res) => {
     });
     await newTopic.save();
     res.json(newTopic);
+    res.status(200).send("added");
   } catch (err) {
     console.log(err + " my error");
   }
@@ -348,27 +345,39 @@ router.put("/thesis", upload.single("image"), async (req, res) => {
 });
 // Display all users
 router.get("/usersGet", async (req, res) => {
-
   const users = await User.find();
 
   res.send(users);
-
 });
 //display all groups
 router.get("/groupget", async (req, res) => {
-
   const users = await Group.find();
 
   res.send(users);
-
 });
 //display all group members
 router.get("/groupmembersget", async (req, res) => {
-
   const users = await GroupMembers.find();
 
   res.send(users);
+});
+//display all supervisors
+router.get("/supervisorsget", async (req, res) => {
+  const users = await User.find({userRole: "Supervisor"});
 
+  res.send(users);
+});
+//display all co-supervisors
+router.get("/cosupervisorsget", async (req, res) => {
+  const users = await User.find({userRole: "Co-Supervisor"});
+
+  res.send(users);
+});
+//display all co-supervisors
+router.get("/getAllTopics", async (req, res) => {
+  const users = await Topic.find();
+
+  res.send(users);
 });
 
 module.exports = router;

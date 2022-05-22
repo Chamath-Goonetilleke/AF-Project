@@ -4,11 +4,11 @@
 
 const request = require("supertest");
 
-const User = require("./models/IT20122614/User_IT20122614");
+const User = require("../../../../models/IT20122614/User_IT20122614");
 let server;
 
 describe("/api/students", () => {
-  beforeEach(() => (server = require("./index")));
+  beforeEach(() => (server = require("../../../../index")));
   afterEach(async () => {
     await server.close();
     await User.remove({});
@@ -35,7 +35,7 @@ describe("/api/students", () => {
 
       await User.collection.insertMany(supervisors);
       const res = await request(server).get("/api/students/usersGet");
-      console.log(res);
+      // console.log(res);
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
     });
