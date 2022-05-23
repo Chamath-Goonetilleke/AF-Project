@@ -1,0 +1,9 @@
+{
+  "name": "default",
+  "db": "",  
+  "jwtPrivateKey": "",
+  
+  "CLOUDINARY_CLOUD_NAME": "dxhudoopp",
+  "CLOUDINARY_API_KEY": "358544432725968",
+  "CLOUDINARY_API_SECRET": "_TLxgao5Kh7MR2XkEiqZC3jyvOc"
+}
