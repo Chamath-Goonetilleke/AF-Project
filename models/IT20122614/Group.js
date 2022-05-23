@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -16,6 +17,7 @@ const groupSchema = new Schema({
   panelmember: {
     type: String,
   },
+
   report: String,
   presentation: String,
   proposal: String,
@@ -23,6 +25,9 @@ const groupSchema = new Schema({
   isOngoing: {
     type: Boolean,
   },
+  isMarked: {
+    type: Boolean,
+  }
 });
 
 const Group = mongoose.model("researchgroups", groupSchema);

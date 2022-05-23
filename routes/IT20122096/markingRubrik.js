@@ -15,7 +15,7 @@ router.post('/', async(req, res) => {
 
 router.get("/", async (req, res) => {
   const Markings = await MarkingRubrik.find();
-  if (!Markings) return res.status(400).send("Cant find any");
+  if (Markings.length===0) return res.status(400).send("Cant find any");
   res.send(Markings)
 
 });

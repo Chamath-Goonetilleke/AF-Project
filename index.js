@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+process.env["NODE_ENV"] = "test"
 
 require("./startUp/db")();
 require("./startUp/config")();

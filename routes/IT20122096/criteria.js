@@ -20,8 +20,8 @@ router.post("/", (req, res) => {
 router.get("/:id", async (req, res) => {
   const criterias = await Criterias.find({ markingRubrikId: req.params.id });
 
-  if (!criterias)
-    return res.status(404).send("Criterias for given id is not found.");
+  if (criterias.length===0)
+    return res.status(400).send("Criterias for given id is not found.");
 
   res.send(criterias);
 });

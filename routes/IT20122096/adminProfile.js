@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const Group = require("../../models/IT20122614/Group");
-const GroupMembers = require("../../models/IT20122614/GroupMembers");
+const GroupMembers = require("../../models/IT20122614/GroupMember");
 
-router.get("/groups", async (req, res) => {
+router.get("/", async (req, res) => {
   const groups = await Group.find();
-  if (!groups) return res.status(400).send("There are no groups");
+  if (groups.length===0) return res.status(400).send("There are no groups");
 
   res.send(groups);
 });
 
-router.put("/groups/addPannelMember/:id", async (req, res) => {
+router.put("/addPannelMember/:id", async (req, res) => {
   const group = await Group.findByIdAndUpdate(
     req.params.id,
     {
@@ -22,20 +22,20 @@ router.put("/groups/addPannelMember/:id", async (req, res) => {
   res.send(group);
 });
 
-router.get("/groups/groupMembers", async (req, res) => {
+router.get("/groupMembers", async (req, res) => {
   const groups = await GroupMembers.find();
-  if (!groups) return res.status(400).send("There are no group members");
+  if (groups.length===0) return res.status(400).send("There are no group members");
 
   res.send(groups);
 });
-router.get("/groups/getGroupMemberById/:id", async (req, res) => {
+router.get("/getGroupMemberById/:id", async (req, res) => {
   const member = await GroupMembers.findById(req.params.id);
   if (!member) return res.status(400).send("There is no group member");
 
   res.send(member);
 });
 
-router.put("/groups/UpdateGroupMembers/:id", async (req, res) => {
+router.put("/UpdateGroupMembers/:id", async (req, res) => {
   const member = await GroupMembers.findByIdAndUpdate(
     req.params.id,
     {
@@ -50,7 +50,7 @@ router.put("/groups/UpdateGroupMembers/:id", async (req, res) => {
 
   res.send(member);
 });
-router.delete("/groups/DeleteGroupMember/:id", async (req, res) => {
+router.delete("/DeleteGroupMember/:id", async (req, res) => {
   const member = await GroupMembers.findByIdAndDelete(req.params.id);
   if (!member) return res.status(400).send("Can't find member for given Id");
   res.send(member);

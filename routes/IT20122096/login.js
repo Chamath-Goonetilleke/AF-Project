@@ -1,5 +1,4 @@
 const express = require("express");
-const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const { User, validateLogin } = require("../../models/IT20122096/User");;
 const Validator = require("../../middleware/validator");
@@ -18,7 +17,7 @@ router.post("/", Validator(validateLogin), async (req, res) => {
 
   const token = user.generateAuthToken();
   
-  res.setHeader("x-auth-token", token);
+  res.header("x-auth-token", token);
   res.send(token);
 });
 

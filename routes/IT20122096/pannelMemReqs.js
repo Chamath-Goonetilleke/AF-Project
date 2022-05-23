@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
   const requests = (await Topic.find()).filter(
     (req) => req.status === "pending"
   );
-  if (!requests) return res.status(400).send("No requests found");
+  if (requests.length===0) return res.status(400).send("No requests found");
   res.send(requests)
 })
 

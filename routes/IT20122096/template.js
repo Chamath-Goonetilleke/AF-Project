@@ -37,7 +37,7 @@ router.post("/:name", multer.single("template"), async (req, res) => {
 
 router.get("/", async (req, res) => {
   const templates = await Template.find();
-  if (!templates) return res.status(400).send("No templates found");
+  if (templates.length===0) return res.status(400).send("No templates found");
   res.send(templates);
 })
 router.delete("/:id", async (req, res) => {

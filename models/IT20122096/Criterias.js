@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 const criteriaSchema = mongoose.Schema({
   name: { type: String, reqired: true },
