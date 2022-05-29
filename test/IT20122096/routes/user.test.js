@@ -2,6 +2,9 @@ const request = require("supertest");
 const { User } = require("../../../models/IT20122096/user");
 
 let server;
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhmYjcwY2JhZjdlYWYzOGZkZDBiOGEiLCJ1c2VyUm9sZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJuYW1lIjoiRGhhbnVzaGthIEpheWF0aGlsYWtlIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjUzNjc4OTcxfQ.P5LOVZZDyUU2p1aO8M2YHwWCWY05IqHp1S1JGFp20es";
+
 describe("/api/user", () => {
   beforeEach(() => (server = require("../../../index")));
   afterEach(async () => {
@@ -33,7 +36,9 @@ describe("/api/user", () => {
 
       await User.collection.insertMany(users);
 
-      const res = await request(server).get("/api/user");
+      const res = await request(server)
+        .get("/api/user")
+        .set("x-auth-token", token);
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
     });
@@ -50,7 +55,9 @@ describe("/api/user", () => {
       };
       const user = new User(data);
       await user.save();
-      const res = await request(server).get(`/api/user/${user._id}`);
+      const res = await request(server)
+        .get(`/api/user/${user._id}`)
+        .set("x-auth-token", token);
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty("name", user.name);
     });
@@ -59,7 +66,10 @@ describe("/api/user", () => {
     let user;
 
     const exec = async () => {
-      return await request(server).post("/api/user").send(user);
+      return await request(server)
+        .post("/api/user")
+        .send(user)
+        .set("x-auth-token", token);
     };
 
     beforeEach(() => {
@@ -106,13 +116,17 @@ describe("/api/user", () => {
   describe("PUT/", () => {
     let user;
     let id;
+    let newUser;
 
     const exec = async () => {
-      return await request(server).put(`/api/user/${id}`).send(user);
+      return await request(server)
+        .put(`/api/user/${id}`)
+        .set("x-auth-token", token)
+        .send(user);
     };
 
     beforeEach(() => {
-      user = {
+      newUser = {
         userRole: "Student",
         researchField: "cyber security",
         name: "Chamath",
@@ -121,9 +135,14 @@ describe("/api/user", () => {
       };
     });
     it("should retunr 200 if user found for given id", async () => {
-      const user1 = new User(user);
+      const user1 = new User(newUser);
       await user1.save();
       id = user1._id;
+      user = {
+        researchField: "cyber security",
+        name: "Chamath",
+        email: "chamath@gmail.com",
+      };
 
       const res = await exec();
       expect(res.status).toBe(200);
@@ -140,7 +159,10 @@ describe("/api/user", () => {
     let id;
 
     const exec = async () => {
-      return await request(server).delete(`/api/user/${id}`).send(user);
+      return await request(server)
+        .delete(`/api/user/${id}`)
+        .send(user)
+        .set("x-auth-token", token);
     };
     beforeEach(() => {
       user = {
@@ -165,6 +187,5 @@ describe("/api/user", () => {
       const res = await exec();
       expect(res.status).toBe(400);
     });
-
-  })
+  });
 });

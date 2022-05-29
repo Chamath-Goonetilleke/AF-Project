@@ -1,10 +1,16 @@
 const request = require("supertest");
+const auth = require("../../../middleware/auth");
 const Group = require("../../../models/IT20122614/Group");
 const GroupMembers = require("../../../models/IT20122614/GroupMember");
 
 let server;
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhmYjcwY2JhZjdlYWYzOGZkZDBiOGEiLCJ1c2VyUm9sZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJuYW1lIjoiRGhhbnVzaGthIEpheWF0aGlsYWtlIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjUzNjc4OTcxfQ.P5LOVZZDyUU2p1aO8M2YHwWCWY05IqHp1S1JGFp20es";
+
 describe("/api/admin/groups", () => {
-  beforeEach(() => (server = require("../../../index")));
+  beforeEach(() => {
+    server = require("../../../index");
+  });
   afterEach(async () => {
     await server.close();
     await Group.deleteMany({});
@@ -24,14 +30,19 @@ describe("/api/admin/groups", () => {
           cosupercisorid: "627fd64293fc1ca85ec445a2",
         },
       ];
+
       await Group.collection.insertMany(groups);
-      const res = await request(server).get("/api/admin/groups");
+      const res = await request(server)
+        .get("/api/admin/groups")
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
     });
     it("should return 400 if groups not found", async () => {
-      const res = await request(server).get("/api/admin/groups");
+      const res = await request(server)
+        .get("/api/admin/groups")
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(400);
     });
@@ -55,47 +66,46 @@ describe("/api/admin/groups", () => {
         },
       ];
       await GroupMembers.collection.insertMany(members);
-      const res = await request(server).get("/api/admin/groups/groupMembers");
+      const res = await request(server)
+        .get("/api/admin/groups/groupMembers")
+        .set("x-auth-token", token);
       expect(res.status).toBe(200);
-
-    })
+    });
     it("should return 400 if members not found", async () => {
-      const res = await request(server).get("/api/admin/groups/groupMembers");
+      const res = await request(server)
+        .get("/api/admin/groups/groupMembers")
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(400);
     });
   });
   describe("GET/:id", () => {
-    
-      
     it("should return 200 if  group found for given id", async () => {
-      const member = 
-        {
-          groupid: "SE3030_GRP_71",
-          userRole: "Student",
-          userId: "IT20122614",
-          name: "kavindu",
-          email: "kavindu@gmail.com",
-          isLeader: true,
-        }
-        
+      const member = {
+        groupid: "SE3030_GRP_71",
+        userRole: "Student",
+        userId: "IT20122614",
+        name: "kavindu",
+        email: "kavindu@gmail.com",
+        isLeader: true,
+      };
+
       const newMember = new GroupMembers(member);
       await newMember.save();
-      const res = await request(server).get(
-        `/api/admin/groups/getGroupMemberById/${newMember._id}`
-      );
+      const res = await request(server)
+        .get(`/api/admin/groups/getGroupMemberById/${newMember._id}`)
+        .set("x-auth-token", token);
       expect(res.status).toBe(200);
-
-    })
+    });
     it("should return 400 if members not found", async () => {
       const id = "627fd64293fc1ca85ec445a1";
-      const res = await request(server).get(
-        `/api/admin/groups/getGroupMemberById/${id}`
-      );
+      const res = await request(server)
+        .get(`/api/admin/groups/getGroupMemberById/${id}`)
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(400);
     });
-  })
+  });
   describe("PUT/addPannelMember/:id", () => {
     let group;
     let updateGroup;
@@ -103,6 +113,7 @@ describe("/api/admin/groups", () => {
     const exec = async () => {
       return await request(server)
         .put(`/api/admin/groups/addPannelMember/${id}`)
+        .set("x-auth-token", token)
         .send(updateGroup);
     };
     beforeEach(() => {
@@ -141,6 +152,7 @@ describe("/api/admin/groups", () => {
     const exec = async () => {
       return await request(server)
         .put(`/api/admin/groups/UpdateGroupMembers/${id}`)
+        .set("x-auth-token", token)
         .send(updateMember);
     };
     beforeEach(() => {
@@ -181,8 +193,8 @@ describe("/api/admin/groups", () => {
       expect(res.status).toBe(400);
     });
   });
-  describe('DELETE/:id', () => {
-    it('should return 200 if successfully deleted', async() => {
+  describe("DELETE/:id", () => {
+    it("should return 200 if successfully deleted", async () => {
       const member = {
         groupid: "SE3030_GRP_71",
         userRole: "Student",
@@ -193,16 +205,16 @@ describe("/api/admin/groups", () => {
       };
       const newMember = new GroupMembers(member);
       await newMember.save();
-      const res = await request(server).delete(
-        `/api/admin/groups/DeleteGroupMember/${newMember._id}`
-      );
-       expect(res.status).toBe(200);
+      const res = await request(server)
+        .delete(`/api/admin/groups/DeleteGroupMember/${newMember._id}`)
+        .set("x-auth-token", token);
+      expect(res.status).toBe(200);
     });
     it("should return 400 if no member found for given id", async () => {
       id = "627fd64293fc1ca85ec445a3";
-      const res = await request(server).delete(
-        `/api/admin/groups/DeleteGroupMember/${id}`
-      );
+      const res = await request(server)
+        .delete(`/api/admin/groups/DeleteGroupMember/${id}`)
+        .set("x-auth-token", token);
       expect(res.status).toBe(400);
     });
   });
