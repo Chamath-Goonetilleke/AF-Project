@@ -7,6 +7,7 @@ require("dotenv").config();
 require("./startUp/db")();
 require("./startUp/config")();
 require("./startUp/routes")(app);
+require("./startUp/prod")(app);
 
 const port = process.env.PORT || 4500;
 const server = app.listen(port, () => {
