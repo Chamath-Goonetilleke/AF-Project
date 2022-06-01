@@ -8,7 +8,7 @@ const router = express.Router();
 //get all topics
 
 router.get("/topics", async (req, res) => {
-  Topic.find().exec((err, topics) => {
+  Topic.find({ status: "pending" }).exec((err, topics) => {
     if (err) {
       return res.status(400).json({
         error: err,
@@ -54,18 +54,16 @@ router.put("/topic/update/:id", (req, res) => {
 
 //get all ResearchGroups
 
-router.get("/researchgroups", async (req, res) => {
-  Group.find().exec((err, researchgroups) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      existingResearchgroups: researchgroups,
+router.get("/researchgroups/:uId", async (req, res) => {
+  const uId = req.params.uId;
+
+  await Group.find({ panelmember: uId })
+    .then((group) => {
+      res.json(group);
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 });
 
 //get a specific ResearchGroup
@@ -89,7 +87,7 @@ router.get("/researchgroup/:id", (req, res) => {
 //get marks criterias
 
 router.get("/criterias", async (req, res) => {
-  Criterias.find({ markingRubrikId: "62800237f9029c4e49caff1f" }).exec(
+  Criterias.find({ markingRubrikId: "628fba32baf7eaf38fdd0bb6" }).exec(
     (err, criterias) => {
       if (err) {
         return res.status(400).json({
@@ -117,6 +115,22 @@ router.post("/criterias/save", (req, res) => {
     }
     return res.status(200).json({
       success: "Posts saved successfully",
+    });
+  });
+});
+
+//get all marks
+
+router.get("/marks", async (req, res) => {
+  Marks.find().exec((err, marks) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      existingMarks: marks,
     });
   });
 });
