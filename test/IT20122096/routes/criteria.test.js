@@ -2,6 +2,9 @@ const { Criterias } = require("../../../models/IT20122096/Criterias");
 const request = require("supertest");
 
 let server;
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhmYjcwY2JhZjdlYWYzOGZkZDBiOGEiLCJ1c2VyUm9sZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJuYW1lIjoiRGhhbnVzaGthIEpheWF0aGlsYWtlIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjUzNjc4OTcxfQ.P5LOVZZDyUU2p1aO8M2YHwWCWY05IqHp1S1JGFp20es";
+  
 describe("/api/criteria", () => {
   beforeEach(() => {
     (server = require("../../../index"))
@@ -30,14 +33,18 @@ describe("/api/criteria", () => {
       ];
       await Criterias.collection.insertMany(criterias);
 
-      const res = await request(server).get(`/api/criteria/${id}`);
+      const res = await request(server)
+        .get(`/api/criteria/${id}`)
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
     });
     it("should return 400 in criterias not found", async () => {
       const id = "627fd64293fc1ca85ec445a2";
-      const res = await request(server).get(`/api/criteria/${id}`);
+      const res = await request(server)
+        .get(`/api/criteria/${id}`)
+        .set("x-auth-token", token);
 
       expect(res.status).toBe(400);
     });
@@ -48,7 +55,10 @@ describe("/api/criteria", () => {
 
 
     const exec = async () => {
-      return await request(server).post("/api/criteria").send(criteria);
+      return await request(server)
+        .post("/api/criteria")
+        .send(criteria)
+        .set("x-auth-token", token);
     };
 
     beforeEach(() => {
