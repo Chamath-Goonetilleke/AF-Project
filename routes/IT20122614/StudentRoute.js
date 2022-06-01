@@ -4,7 +4,7 @@ let Group = require("../../models/IT20122614/Group");
 const GroupMembers = require("../../models/IT20122614/GroupMember");
 let Topic = require("../../models/IT20122614/RegisterTopic");
 const RequestSepervisor = require("../../models/IT20122614/RequestSepervisor");
-const { User } = require("../../models/IT20122096/user");
+const { User } = require("../../models/IT20122096/User");
 const upload = require("../../utils/multer");
 const { body, validationResult } = require("express-validator");
 
