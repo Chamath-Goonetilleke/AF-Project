@@ -2,8 +2,6 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 
-//process.env["NODE_ENV"] = "production";
-
 require("./startUp/db")();
 require("./startUp/config")();
 require("./startUp/routes")(app);
