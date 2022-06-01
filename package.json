@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "npm run build",
-    "heroku-postbuild": "npm run build",
     "test": "jest --watchAll --verbose --coverage --maxWorkers 1 "
   },
   "author": "",
