@@ -22,7 +22,7 @@ describe("Test the get methods", () => {
 
   test("Test 3 - Get All ResearchGroups", async () => {
     const response = await request(server).get(
-      "/api/topics/researchgroups"
+      "/api/topics/researchgroups/:uId"
     );
     expect(response.statusCode).toBe(200);
   });

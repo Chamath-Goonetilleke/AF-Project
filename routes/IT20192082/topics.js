@@ -87,7 +87,7 @@ router.get("/researchgroup/:id", (req, res) => {
 //get marks criterias
 
 router.get("/criterias", async (req, res) => {
-  Criterias.find({ markingRubrikId: "628fba32baf7eaf38fdd0bb6" }).exec(
+  Criterias.find({ markingRubrikId: "629a2d77b8434810c22df0ef" }).exec(
     (err, criterias) => {
       if (err) {
         return res.status(400).json({
